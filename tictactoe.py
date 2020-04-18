@@ -1,3 +1,5 @@
+import random
+
 class TicTacToe:
 	def __init__(self):
 		self.game_size = 3
@@ -8,6 +10,11 @@ class TicTacToe:
 		self.board = [[self.empty for _ in range(self.game_size)] for _ in range(self.game_size)]
 		self.game_over = False
 		self.winner = None
+
+		self.empty_spots = []
+		for i in range(self.game_size):
+			for j in range(self.game_size):
+				self.empty_spots.append((i, j))
 
 	def display_board(self):
 		row_divide = "---------"
@@ -31,6 +38,16 @@ class TicTacToe:
 				print("This location is already filled, please enter another location")
 		else:
 			print("invalid location, please enter another location")
+		self.empty_spots.remove(location)
+		self.display_board()
+		if self.player == self.player_0:
+			self.player = self.player_1
+		else:
+			self.player = self.player_0
+
+		self.check_win()
+		if not self.game_over:
+			print("IT IS NOW PLAYER " + self.player + "'S TURN")
 
 	def check_win(self):
 		# check if any rows are completed
@@ -79,23 +96,23 @@ class TicTacToe:
 						self.winner = player_spot
 						self.game_over = True
 
-
+	def random_moves(self):
+		random_location = self.empty_spots[random.randint(0, len(self.empty_spots))]
+		self.update_board(self.player, random_location)
 
 
 	def player_move(self):
 		x = input("Please choose an x coordinate: ")
 		y = input("Please choose a y coordinate: ")
 		self.update_board(self.player, (int(x), int(y)))
-		if self.player == self.player_0:
-			self.player = self.player_1
-		else:
-			self.player = self.player_0
+		
 
 	def play(self):
+		print("IT IS NOW PLAYER " + self.player + "'S TURN")
 		while not self.game_over:
 			self.player_move()
-			self.display_board()
-			self.check_win()
+			if not self.game_over:
+				self.random_moves()
 
 		print("GAME OVER, " + self.winner + " HAS WON")
 
