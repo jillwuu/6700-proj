@@ -1,7 +1,9 @@
 import random
+from minimax import Minimax 
 
 class TicTacToe:
 	def __init__(self):
+		self.minimax = Minimax()
 		self.game_size = 3
 		self.player_0 = 'X'
 		self.player_1 = 'O'
@@ -95,10 +97,11 @@ class TicTacToe:
 					elif x == self.game_size - 1:
 						self.winner = player_spot
 						self.game_over = True
+		self.game_over = self.minimax.all_filled(self.board)
 
-	def random_moves(self):
-		random_location = self.empty_spots[random.randint(0, len(self.empty_spots))]
-		self.update_board(self.player, random_location)
+	def computer_move(self):
+		computer_loc = (self.minimax.algorithm(self.board))
+		self.update_board(self.player, computer_loc)
 
 
 	def player_move(self):
@@ -112,9 +115,11 @@ class TicTacToe:
 		while not self.game_over:
 			self.player_move()
 			if not self.game_over:
-				self.random_moves()
-
-		print("GAME OVER, " + self.winner + " HAS WON")
+				self.computer_move()
+		if self.winner:
+			print("GAME OVER, " + self.winner + " HAS WON")
+		else:
+			print("GAME OVER, TIE!")
 
 
 game = TicTacToe()
