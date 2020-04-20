@@ -5,32 +5,32 @@ class TicTacToe:
 	def __init__(self):
 		# 6 rows, 7 columns
 		self.minimax = Minimax()
-		self.column_size = 6 #number of rows
 		self.row_size = 7 #number of columns
+		self.column_size = 9 #number of rows
 		self.player_0 = 'X'
 		self.player_1 = 'O'
 		self.player = self.player_0
 		self.empty = ' '
-		self.board = [[self.empty for _ in range(self.row_size)] for _ in range(self.column_size)]
+		self.board = [[self.empty for _ in range(self.column_size)] for _ in range(self.row_size)]
 		self.game_over = False
 		self.winner = None
 
 		self.empty_spots = []
-		for i in range(self.column_size):
-			for j in range(self.row_size):
+		for i in range(self.row_size):
+			for j in range(self.column_size):
 				self.empty_spots.append((i, j))
 
 	def display_board(self):
-		row_divide = "-------------------------"
-		for x in range(self.row_size):
+		row_divide = "--" + ("----" * (self.row_size - 1)) + "---"
+		for x in range(self.column_size):
 			curr_row = ""
-			for y in range(self.column_size):
-				if y < self.row_size - 1:
-					curr_row = curr_row + self.board[y][self.column_size - x] + " | "
+			for y in range(self.row_size):
+				if y < self.column_size - 1:
+					curr_row = curr_row + self.board[y][self.column_size - x - 1] + " | "
 				else:
-					curr_row = curr_row + self.board[y][self.column_size - x]
+					curr_row = curr_row + self.board[y][self.column_size - x - 1]
 			print(curr_row)
-			if x != self.row_size-1:
+			if x != self.column_size-1:
 				print(row_divide)
 
 	def update_board(self, player, column):
@@ -43,7 +43,6 @@ class TicTacToe:
 		else:
 			print("invalid location, please enter another location")
 		# self.empty_spots.remove(location)
-		print(self.board)
 		self.display_board()
 		if self.player == self.player_0:
 			self.player = self.player_1
@@ -68,14 +67,14 @@ class TicTacToe:
 							self.game_over = True
 
 		# check if any columns are completed
-		for y in range(self.row_size):
+		for y in range(self.column_size):
 			if self.game_over == False:
 				player_spot = self.board[0][y]
 				if player_spot != self.empty:
-					for x in range(1, self.column_size):
+					for x in range(1, self.row_size):
 						if player_spot != self.board[x][y]:
 							break
-						elif x == self.column_size - 1:
+						elif x == self.row_size - 1:
 							self.winner = player_spot
 							self.game_over = True
 
@@ -83,10 +82,10 @@ class TicTacToe:
 		if self.game_over == False:
 			player_spot = self.board[0][0]
 			if player_spot != self.empty:
-				for x in range(1, self.column_size):
+				for x in range(1, self.row_size):
 					if player_spot != self.board[x][x]:
 						break
-					elif x == self.column_size - 1:
+					elif x == self.row_size - 1:
 						self.winner = player_spot
 						self.game_over = True
 
@@ -94,10 +93,10 @@ class TicTacToe:
 		if self.game_over == False:
 			player_spot = self.board[2][0]
 			if player_spot != self.empty:
-				for x in range(1, self.column_size):
+				for x in range(1, self.row_size):
 					if player_spot != self.board[2-x][x]:
 						break
-					elif x == self.column_size - 1:
+					elif x == self.row_size - 1:
 						self.winner = player_spot
 						self.game_over = True
 
