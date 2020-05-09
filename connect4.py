@@ -53,58 +53,115 @@ class TicTacToe:
 		# if not self.game_over:
 		# 	print("IT IS NOW PLAYER " + self.player + "'S TURN")
 
+
 	def check_win(self):
-		# check if any rows are completed
-		for x in range(self.game_size):
-			if self.game_over == False:
-				player_spot = self.board[x][0]
-				if player_spot != self.empty:
-					for y in range(1, self.game_size):
-						if player_spot != self.board[x][y]:
-							break
-						elif y == self.game_size - 1:
-							self.winner = player_spot
-							self.game_over = True
-
-		# check if any columns are completed
-		for y in range(self.column_size):
-			if self.game_over == False:
-				player_spot = self.board[0][y]
-				if player_spot != self.empty:
-					for x in range(1, self.row_size):
-						if player_spot != self.board[x][y]:
-							break
-						elif x == self.row_size - 1:
-							self.winner = player_spot
-							self.game_over = True
-
-		# check diagonal top left to bottom right (0,0) (1,1) (2,2)
-		if self.game_over == False:
-			player_spot = self.board[0][0]
-			if player_spot != self.empty:
-				for x in range(1, self.row_size):
-					if player_spot != self.board[x][x]:
-						break
-					elif x == self.row_size - 1:
-						self.winner = player_spot
+		# check just columns
+		for i in range(self.row_size):
+			num = 0
+			mark = self.board[i][0]
+			for j in range(self.column_size):
+				if self.board[i][j] == mark:
+					num += 1
+					if num == 4:
+						self.winner = mark
 						self.game_over = True
+						return
+				else:
+					num = 0
+					mark = self.board[i][j]
 
-		# check diagonal top right to bottom left (2,0) (1,1) (0,2)
-		if self.game_over == False:
-			player_spot = self.board[2][0]
-			if player_spot != self.empty:
-				for x in range(1, self.row_size):
-					if player_spot != self.board[2-x][x]:
-						break
-					elif x == self.row_size - 1:
-						self.winner = player_spot
+		# check just rows
+		for i in range(self.column_size):
+			num = 0
+			mark = self.board[0][i]
+			for j in range(self.row_size):
+				if self.board[j][i] == mark:
+					num += 1
+					if num == 4:
+						self.winner = mark
 						self.game_over = True
+						return
+				else:
+					num = 0
+					mark = self.board[j][i]
 
-		self.game_over = self.minimax.all_filled(self.board)
+		# diagonals
+		
+		for i in range(self.row_size - 1, -1, -1):
+			mark = self.board[i][0]
+			num = 0
+			for j in range(self.column_size + self.row_size):
+				new_col = i + j
+				if new_col >= self.row_size:
+					break
+				if j > self.column_size:
+					break
+				if self.board[new_col][j] == mark:
+					num += 1
+					if num == 4:
+						self.winner = mark
+						self.game_over = True
+						return
+				else:
+					num = 0
+					mark = self.board[new_col][j]
 
-	# def computer_move(self):
-	# 	computer_loc = (self.minimax.algorithm(self.board))
-		# self.update_board(self.player, computer_loc)
+		for i in range(self.row_size):
+			mark = self.board[0][i]
+			num = 0
+			for j in range(i, self.column_size + self.row_size):
+				new_col = j - i 
+				if new_col >= self.row_size:
+					break
+				if j > self.column_size:
+					break
+				if self.board[new_col][j] == mark:
+					num += 1
+					if num == 4:
+						self.winner = mark
+						self.game_over = True
+						return
+				else:
+					num = 0
+					mark = self.board[new_col][j]
+
+		for i in range(self.row_size):
+			mark = self.board[i][0]
+			num = 0
+			for j in range(self.row_size + self.column_size):
+				new_col = i - j
+				if new_col >= self.row_size:
+					break
+				if j > self.column_size:
+					break
+				if self.board[new_col][j] == mark:
+					num += 1
+					if num == 4:
+						self.winner = mark
+						self.game_over = True
+						return
+				else:
+					num = 0
+					mark = self.board[new_col][j]
+
+		for i in range(self.column_size):
+			mark = self.board[self.row_size - 1][0]
+			num = 0
+			for j in range(self.row_size + self.column_size):
+				new_col = self.row_size - 1 - j
+				if new_col >= self.row_size:
+					break
+				if j > self.column_size:
+					break
+				if self.board[new_col][j] == mark:
+					num += 1
+					if num == 4:
+						self.winner = mark
+						self.game_over = True
+						return
+				else:
+					num = 0
+					mark = self.board[new_col][j]
 
 
 	def player_move(self):
