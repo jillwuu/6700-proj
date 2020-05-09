@@ -1,10 +1,10 @@
 import random
 from minimax import Minimax 
 
-class TicTacToe:
+class Connect4:
 	def __init__(self):
 		# 6 rows, 7 columns
-		self.minimax = Minimax()
+		self.minimax = Minimax("connect4")
 		self.row_size = 7 #number of columns
 		self.column_size = 9 #number of rows
 		self.player_0 = 'X'
@@ -126,5 +126,5 @@ class TicTacToe:
 			print("GAME OVER, TIE!")
 
 
-game = TicTacToe()
+game = Connect4()
 game.play()
