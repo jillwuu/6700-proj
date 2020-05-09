@@ -49,9 +49,9 @@ class TicTacToe:
 		else:
 			self.player = self.player_0
 
-		# self.check_win()
-		# if not self.game_over:
-		# 	print("IT IS NOW PLAYER " + self.player + "'S TURN")
+		self.check_win()
+		if not self.game_over:
+			print("IT IS NOW PLAYER " + self.player + "'S TURN")
 
 
 	def check_win(self):
@@ -60,7 +60,7 @@ class TicTacToe:
 			num = 0
 			mark = self.board[i][0]
 			for j in range(self.column_size):
-				if self.board[i][j] == mark:
+				if self.board[i][j] == mark and self.board[i][j] != self.empty:
 					num += 1
 					if num == 4:
 						self.winner = mark
@@ -75,7 +75,7 @@ class TicTacToe:
 			num = 0
 			mark = self.board[0][i]
 			for j in range(self.row_size):
-				if self.board[j][i] == mark:
+				if self.board[j][i] == mark and self.board[j][i] != self.empty:
 					num += 1
 					if num == 4:
 						self.winner = mark
@@ -86,7 +86,7 @@ class TicTacToe:
 					mark = self.board[j][i]
 
 		# diagonals
-		
+
 		for i in range(self.row_size - 1, -1, -1):
 			mark = self.board[i][0]
 			num = 0
@@ -94,9 +94,9 @@ class TicTacToe:
 				new_col = i + j
 				if new_col >= self.row_size:
 					break
-				if j > self.column_size:
+				if j >= self.column_size:
 					break
-				if self.board[new_col][j] == mark:
+				if self.board[new_col][j] == mark and self.board[new_col][j] != self.empty:
 					num += 1
 					if num == 4:
 						self.winner = mark
@@ -113,9 +113,9 @@ class TicTacToe:
 				new_col = j - i 
 				if new_col >= self.row_size:
 					break
-				if j > self.column_size:
+				if j >= self.column_size:
 					break
-				if self.board[new_col][j] == mark:
+				if self.board[new_col][j] == mark and self.board[new_col][j] != self.empty:
 					num += 1
 					if num == 4:
 						self.winner = mark
@@ -130,11 +130,11 @@ class TicTacToe:
 			num = 0
 			for j in range(self.row_size + self.column_size):
 				new_col = i - j
-				if new_col >= self.row_size:
+				if new_col >= self.row_size or new_col < 0:
 					break
-				if j > self.column_size:
+				if j >= self.column_size:
 					break
-				if self.board[new_col][j] == mark:
+				if self.board[new_col][j] == mark and self.board[new_col][j] != self.empty:
 					num += 1
 					if num == 4:
 						self.winner = mark
@@ -149,11 +149,11 @@ class TicTacToe:
 			num = 0
 			for j in range(self.row_size + self.column_size):
 				new_col = self.row_size - 1 - j
-				if new_col >= self.row_size:
+				if new_col >= self.row_size or new_col < 0:
 					break
-				if j > self.column_size:
+				if j >= self.column_size:
 					break
-				if self.board[new_col][j] == mark:
+				if self.board[new_col][j] == mark and self.board[new_col][j] != self.empty:
 					num += 1
 					if num == 4:
 						self.winner = mark
