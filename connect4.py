@@ -163,6 +163,9 @@ class Connect4:
 					num = 0
 					mark = self.board[new_col][j]
 
+	def computer_move(self):
+		computer_loc = (self.minimax.algorithm(self.board))
+		self.update_board(self.player, computer_loc[0])
 
 	def player_move(self):
 		x = input("Please choose a column to place your piece: ")
@@ -175,8 +178,8 @@ class Connect4:
 		print("IT IS NOW PLAYER " + self.player + "'S TURN")
 		while not self.game_over:
 			self.player_move()
-			# if not self.game_over:
-			# 	self.computer_move()
+			if not self.game_over:
+				self.computer_move()
 		if self.winner:
 			print("GAME OVER, " + self.winner + " HAS WON")
 		else:

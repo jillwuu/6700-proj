@@ -6,7 +6,7 @@ class Minimax:
 		self.empty = ' '
 		self.computer_sign = 'O'
 		self.player_sign = 'X'
-		if game == "connect_4":
+		if game == "connect4":
 			self.row_size = 7
 			self.column_size = 9
 		else:	
@@ -16,9 +16,9 @@ class Minimax:
 	def algorithm(self, board):
 		utility = -sys.maxint - 1
 		pos = {}
-		if self.game = "connect4":
+		if self.game == "connect4":
 			for i in range(self.row_size):
-				j = self.board[i].count('X') + self.board[i].count('O')
+				j = board[i].count('X') + board[i].count('O')
 				if j < self.column_size:
 					newboard = deepcopy(board)
 					newboard[i][j] = self.computer_sign
@@ -40,35 +40,35 @@ class Minimax:
 
 	def connect4_min_comp(self, board, depth):
 		board_val = self.connect4_check_val(board)
+		depth += 1
 		if (board_val != 0 or depth > 5 or self.all_filled(board)): # depth no greater than 5? this is arbitrary, so we can change
 			return board_val
 		utility = sys.maxint
 		for i in range(self.row_size):
-			j = self.board[i].count('X') + self.board[i].count('O')
+			j = board[i].count('X') + board[i].count('O')
 			if j < self.column_size:
 				newboard = deepcopy(board)
 				newboard[i][j] = self.player_sign
-				temp_utility = self.connect4_max_comp(newboard)
+				temp_utility = self.connect4_max_comp(newboard, depth)
 				if (temp_utility > utility):
 					utility = temp_utility
-		depth += 1
 		return utility
 		
 
-	def connect4_max_comp(self, board):
+	def connect4_max_comp(self, board, depth):
 		board_val = self.connect4_check_val(board)
+		depth += 1
 		if (board_val != 0 or depth > 5 or self.all_filled(board)): # depth no greater than 5? this is arbitrary, so we can change
 			return board_val
 		utility = -sys.maxint - 1
 		for i in range(self.row_size):
-			j = self.board[i].count('X') + self.board[i].count('O')
+			j = board[i].count('X') + board[i].count('O')
 			if j < self.column_size:
 				newboard = deepcopy(board)
 				newboard[i][j] = self.computer_sign
-				temp_utility = self.connect4_min_comp(newboard)
+				temp_utility = self.connect4_min_comp(newboard, depth)
 				if (temp_utility > utility):
 					utility = temp_utility
-		depth += 1
 		return utility
 
 	def min_comp(self, board):
@@ -102,20 +102,26 @@ class Minimax:
 		return utility;
 
 	def all_filled(self, board):
-		for x in range(self.game_size):
-			for y in range(self.game_size):
-				if board[x][y] == self.empty:
-					return False
+		if self.game == "connect4":
+			for x in range(self.row_size):
+				for y in range(self.column_size):
+					if board[x][y] == self.empty:
+						return False
+		else:
+			for x in range(self.game_size):
+				for y in range(self.game_size):
+					if board[x][y] == self.empty:
+						return False
 		return True
 
 	def connect4_check_val(self, board):
 		# if any rows of 4 pieces are completed
 		for x in range(self.row_size):
 			for y in range(self.column_size-4):
-				player_spot = [y][x]
+				player_spot = board[x][y]
 				if player_spot != self.empty:
 					for y_move in range(y, y+3):
-						if player_spot != board[x, y_move]:
+						if player_spot != board[x][y_move]:
 							if y_move == y+2:  #only 2 in a row (3rd spot not there)
 								if (player_spot == self.player_sign):
 									return -0.5
@@ -136,11 +142,11 @@ class Minimax:
 		# check if any columns w/ 4 pieces are completed
 		for y in range(self.column_size):
 			for x in range(self.row_size-4):
-				player_spot = [y][x]
+				player_spot = board[x][y]
 				if player_spot != self.empty:
 					for x_move in range(x, x+3):
-						if player_spot != board[x_move, y]:
-							elif x_move == x+2: #only 2 in a row (3rd spot not there)
+						if player_spot != board[x_move][y]:
+							if x_move == x+2: #only 2 in a row (3rd spot not there)
 								if (player_spot == self.player_sign):
 									return -0.5
 								elif (player_spot == self.computer_sign):
@@ -157,17 +163,126 @@ class Minimax:
 							elif (player_spot == self.computer_sign):
 								return 1
 
-		# for y in range(3, self.column_size):
-		# 	for x in range(0, self.row_size-4):
-		# 		player_spot = board[x][y]
-		# 			if player_spot != self.empty:
-		# 				if player_spot != board[x][x]:
-		# 					break
-		# 				elif x == self.game_size - 1:
-		# 					if (player_spot == self.player_sign):
-		# 						return -1
-		# 					elif (player_spot == self.computer_sign):
-		# 						return 1
+		for i in range(self.row_size - 1, -1, -1):
+			mark = board[i][0]
+			num = 0
+			for j in range(self.column_size + self.row_size):
+				new_col = i + j
+				if new_col >= self.row_size:
+					break
+				if j >= self.column_size:
+					break
+				if board[new_col][j] == mark and board[new_col][j] != self.empty:
+					num += 1
+					if num == 4:
+						if mark == self.player_sign:
+							return -1
+						elif (mark == self.computer_sign):
+							return 1
+				else:
+					if num == 2:
+						if mark == self.player_sign:
+							return -0.5
+						elif (mark == self.computer_sign):
+							return 0.5
+					elif num == 3:
+						if mark == self.player_sign:
+							return -0.75
+						elif (mark == self.computer_sign):
+							return 0.75
+					num = 0
+					mark = board[new_col][j]
+
+		for i in range(self.row_size):
+			mark = board[0][i]
+			num = 0
+			for j in range(i, self.column_size + self.row_size):
+				new_col = j - i 
+				if new_col >= self.row_size:
+					break
+				if j >= self.column_size:
+					break
+				if board[new_col][j] == mark and board[new_col][j] != self.empty:
+					num += 1
+					if num == 4:
+						if mark == self.player_sign:
+							return -1
+						elif (mark == self.computer_sign):
+							return 1
+				else:
+					if num == 2:
+						if mark == self.player_sign:
+							return -0.5
+						elif (mark == self.computer_sign):
+							return 0.5
+					elif num == 3:
+						if mark == self.player_sign:
+							return -0.75
+						elif (mark == self.computer_sign):
+							return 0.75
+					num = 0
+					mark = board[new_col][j]
+
+		for i in range(self.row_size):
+			mark = board[i][0]
+			num = 0
+			for j in range(self.row_size + self.column_size):
+				new_col = i - j
+				if new_col >= self.row_size or new_col < 0:
+					break
+				if j >= self.column_size:
+					break
+				if board[new_col][j] == mark and board[new_col][j] != self.empty:
+					num += 1
+					if num == 4:
+						if mark == self.player_sign:
+							return -1
+						elif (mark == self.computer_sign):
+							return 1
+				else:
+					if num == 2:
+						if mark == self.player_sign:
+							return -0.5
+						elif (mark == self.computer_sign):
+							return 0.5
+					elif num == 3:
+						if mark == self.player_sign:
+							return -0.75
+						elif (mark == self.computer_sign):
+							return 0.75
+					num = 0
+					mark = board[new_col][j]
+
+		for i in range(self.column_size):
+			mark = board[self.row_size - 1][0]
+			num = 0
+			for j in range(self.row_size + self.column_size):
+				new_col = self.row_size - 1 - j
+				if new_col >= self.row_size or new_col < 0:
+					break
+				if j >= self.column_size:
+					break
+				if board[new_col][j] == mark and board[new_col][j] != self.empty:
+					num += 1
+					if num == 4:
+						if mark == self.player_sign:
+							return -1
+						elif (mark == self.computer_sign):
+							return 1
+				else:
+					if num == 2:
+						if mark == self.player_sign:
+							return -0.5
+						elif (mark == self.computer_sign):
+							return 0.5
+					elif num == 3:
+						if mark == self.player_sign:
+							return -0.75
+						elif (mark == self.computer_sign):
+							return 0.75
+					num = 0
+					mark = board[new_col][j]
+
 
 		# TODO: check diagonals
 
