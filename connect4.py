@@ -4,7 +4,7 @@ from minimax import Minimax
 class Connect4:
 	def __init__(self):
 		# 6 rows, 7 columns
-		self.minimax = Minimax("connect4")
+		self.minimax = Minimax("connect4", 3)
 		self.row_size = 7 #number of columns
 		self.column_size = 9 #number of rows
 		self.player_0 = 'X'
