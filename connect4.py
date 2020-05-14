@@ -5,6 +5,8 @@ class Connect4:
 	def __init__(self):
 		# 6 rows, 7 columns
 		self.minimax = Minimax("connect4", 3)
+		self.minimax_heuristic_1 = Minimax("connect4", 2, 2, 'X', 'O') # set depth, then heuristic function, then THIS ALGORITHM'S mark, then other player's mark
+		self.minimax_heuristic_2 = Minimax("connect4", 2, 2, 'O', 'X') # set depth, then heuristic function, then THIS ALGORITHM'S mark, then other player's mark
 		self.row_size = 7 #number of columns
 		self.column_size = 9 #number of rows
 		self.player_0 = 'X'
@@ -67,7 +69,10 @@ class Connect4:
 						self.game_over = True
 						return
 				else:
-					num = 0
+					if(self.board[i][j] == self.empty):
+						num = 0
+					else:
+						num = 1
 					mark = self.board[i][j]
 
 		# check just rows
@@ -82,7 +87,10 @@ class Connect4:
 						self.game_over = True
 						return
 				else:
-					num = 0
+					if(self.board[j][i] == self.empty):
+						num = 0
+					else:
+						num = 1
 					mark = self.board[j][i]
 
 		# diagonals
@@ -103,7 +111,10 @@ class Connect4:
 						self.game_over = True
 						return
 				else:
-					num = 0
+					if(self.board[new_col][j] == self.empty):
+						num = 0
+					else:
+						num = 1
 					mark = self.board[new_col][j]
 
 		for i in range(self.row_size):
@@ -122,7 +133,10 @@ class Connect4:
 						self.game_over = True
 						return
 				else:
-					num = 0
+					if(self.board[new_col][j] == self.empty):
+						num = 0
+					else:
+						num = 1
 					mark = self.board[new_col][j]
 
 		for i in range(self.row_size):
@@ -141,7 +155,10 @@ class Connect4:
 						self.game_over = True
 						return
 				else:
-					num = 0
+					if(self.board[new_col][j] == self.empty):
+						num = 0
+					else:
+						num = 1
 					mark = self.board[new_col][j]
 
 		for i in range(self.column_size):
@@ -160,7 +177,10 @@ class Connect4:
 						self.game_over = True
 						return
 				else:
-					num = 0
+					if(self.board[new_col][j] == self.empty):
+						num = 0
+					else:
+						num = 1
 					mark = self.board[new_col][j]
 
 	def computer_move(self):
@@ -170,6 +190,14 @@ class Connect4:
 	def player_move(self):
 		x = input("Please choose a column to place your piece: ")
 		self.update_board(self.player, int(x))
+
+	def heuristic_1_move(self):
+		computer_loc_h = (self.minimax_heuristic_1.algorithm(self.board))
+		self.update_board(self.player, computer_loc_h[0])
+
+	def heuristic_2_move(self):
+		computer_loc_h = (self.minimax_heuristic_2.algorithm(self.board))
+		self.update_board(self.player, computer_loc_h[0])
 		
 
 	def play(self):
@@ -185,6 +213,16 @@ class Connect4:
 		else:
 			print("GAME OVER, TIE!")
 
+	def evaluate(self):
+		while not self.game_over:
+			self.heuristic_1_move()
+			if not self.game_over:
+				self.heuristic_2_move()
+		if self.winner:
+			print("GAME OVER, " + self.winner + " HAS WON")
+		else:
+			print("GAME OVER, TIE!")
+
 
 game = Connect4()
-game.play()
+game.evaluate()

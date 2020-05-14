@@ -2,10 +2,10 @@ import sys
 from copy import deepcopy
 
 class Minimax:
-	def __init__(self, game, depth=5):
+	def __init__(self, game, depth=5, heuristic=1, computer_sign='O', player_sign='X'):
 		self.empty = ' '
-		self.computer_sign = 'O'
-		self.player_sign = 'X'
+		self.computer_sign = computer_sign
+		self.player_sign = player_sign # OTHER player
 		if game == "connect4": # todo
 			self.row_size = 7
 			self.column_size = 9
@@ -13,6 +13,7 @@ class Minimax:
 			self.game_size = 3
 		self.game = game # either connect4 or tictactoe
 		self.depth = depth
+		self.heuristic = heuristic
 
 	def algorithm(self, board):
 		utility = -sys.maxint - 1
@@ -23,7 +24,7 @@ class Minimax:
 				if j < self.column_size:
 					newboard = deepcopy(board)
 					newboard[i][j] = self.computer_sign
-					temp_utility = self.connect4_min_comp(newboard, 0)
+					temp_utility = self.connect4_min_comp(newboard, 0)  # talk, could probably do more randomization here
 					if (temp_utility > utility):
 						utility = temp_utility
 						pos = (i, j)
@@ -42,7 +43,7 @@ class Minimax:
 	def connect4_min_comp(self, board, depth):
 		depth += 1
 		if (depth > self.depth):# or self.all_filled(board)): # depth no greater than 5? this is arbitrary, so we can change
-			board_val = self.connect4_check_val_v2(board)
+			board_val = self.connect4_check_val(board) if self.heuristic == 1 else self.connect4_check_val_v2(board)
 			return board_val
 		utility = sys.maxint
 		for i in range(self.row_size):
@@ -59,7 +60,7 @@ class Minimax:
 	def connect4_max_comp(self, board, depth):
 		depth += 1
 		if (depth > self.depth):# or self.all_filled(board)): # depth no greater than 5? this is arbitrary, so we can change
-			board_val = self.connect4_check_val_v2(board)
+			board_val = self.connect4_check_val(board) if self.heuristic == 1 else self.connect4_check_val_v2(board)
 			return board_val
 		utility = -sys.maxint - 1
 		for i in range(self.row_size):
@@ -115,6 +116,7 @@ class Minimax:
 						return False
 		return True
 
+	# heuristic 1
 	def connect4_check_val(self, board):
 		# if any rows of 4 pieces are completed
 		for x in range(self.row_size):
@@ -289,6 +291,7 @@ class Minimax:
 
 		return 0
 
+	# heuristic 2
 	# checks for pieces in a row in a row/col/diagonal AND for total number of "XXXO" in row/col/diagonal where X is other player (ie this one tries to block!)
 	def connect4_check_val_v2(self, board):
 		# if any rows of 4 pieces are completed
