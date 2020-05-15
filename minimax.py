@@ -1,4 +1,5 @@
 import sys
+import random
 from copy import deepcopy
 
 class Minimax:
@@ -19,26 +20,30 @@ class Minimax:
 		utility = -sys.maxint - 1
 		pos = {}
 		if self.game == "connect4":
+			choices = []
 			for i in range(self.row_size):
 				j = board[i].count('X') + board[i].count('O')
 				if j < self.column_size:
 					newboard = deepcopy(board)
 					newboard[i][j] = self.computer_sign
 					temp_utility = self.connect4_min_comp(newboard, 0)  # talk, could probably do more randomization here
-					if (temp_utility > utility):
+					if (temp_utility >= utility):
 						utility = temp_utility
 						pos = (i, j)
+						choices.append(pos)
 		else:
+			choices = []
 			for i in range(self.game_size):
 				for j in range(self.game_size):
 					if board[i][j] == self.empty:
 						newboard = deepcopy(board)
 						newboard[i][j] = self.computer_sign
 						temp_utility = self.min_comp(newboard)
-						if (temp_utility > utility):
+						if (temp_utility >= utility):
 							utility = temp_utility
 							pos = (i, j)
-		return pos;
+							choices.append(pos)
+		return random.choice(choices);
 
 	def connect4_min_comp(self, board, depth):
 		depth += 1
@@ -193,7 +198,10 @@ class Minimax:
 							return -0.75
 						elif (mark == self.computer_sign):
 							return 0.75
-					num = 0
+					if(board[new_col][j] == self.empty):
+						num = 0
+					else:
+						num = 1
 					mark = board[new_col][j]
 
 		for i in range(self.row_size):
@@ -223,7 +231,10 @@ class Minimax:
 							return -0.75
 						elif (mark == self.computer_sign):
 							return 0.75
-					num = 0
+					if(board[new_col][j] == self.empty):
+						num = 0
+					else:
+						num = 1
 					mark = board[new_col][j]
 
 		for i in range(self.row_size):
@@ -253,7 +264,10 @@ class Minimax:
 							return -0.75
 						elif (mark == self.computer_sign):
 							return 0.75
-					num = 0
+					if(board[new_col][j] == self.empty):
+						num = 0
+					else:
+						num = 1
 					mark = board[new_col][j]
 
 		for i in range(self.column_size):
@@ -283,7 +297,10 @@ class Minimax:
 							return -0.75
 						elif (mark == self.computer_sign):
 							return 0.75
-					num = 0
+					if(board[new_col][j] == self.empty):
+						num = 0
+					else:
+						num = 1
 					mark = board[new_col][j]
 
 
@@ -328,7 +345,10 @@ class Minimax:
 							total_sum -= 0.25
 						if mark == self.computer_sign:
 							total_sum += 0.25
-					num = 0
+					if(board[i][j] == self.empty):
+						num = 0
+					else:
+						num = 1
 					mark = board[i][j]
 		# check just rows
 		for i in range(self.column_size):
@@ -360,7 +380,10 @@ class Minimax:
 							total_sum -= 0.25
 						if mark == self.computer_sign:
 							total_sum += 0.25
-					num = 0
+					if(board[j][i] == self.empty):
+						num = 0
+					else:
+						num = 1
 					mark = board[j][i]
 		# diagonals
 
@@ -399,7 +422,10 @@ class Minimax:
 							total_sum -= 0.25
 						if mark == self.computer_sign:
 							total_sum += 0.25
-					num = 0
+					if(board[new_col][j] == self.empty):
+						num = 0
+					else:
+						num = 1
 					mark = board[new_col][j]
 
 		for i in range(row_size):
@@ -436,7 +462,10 @@ class Minimax:
 							total_sum -= 0.25
 						if mark == self.computer_sign:
 							total_sum += 0.25
-					num = 0
+					if(board[new_col][j] == self.empty):
+						num = 0
+					else:
+						num = 1
 					mark = board[new_col][j]
 
 		for i in range(row_size):
@@ -473,7 +502,10 @@ class Minimax:
 							total_sum -= 0.25
 						if mark == self.computer_sign:
 							total_sum += 0.25
-					num = 0
+					if(board[new_col][j] == self.empty):
+						num = 0
+					else:
+						num = 1
 					mark = board[new_col][j]
 
 		for i in range(column_size):
@@ -510,7 +542,10 @@ class Minimax:
 							total_sum -= 0.25
 						if mark == self.computer_sign:
 							total_sum += 0.25
-					num = 0
+					if(board[new_col][j] == self.empty):
+						num = 0
+					else:
+						num = 1
 					mark = board[new_col][j]
 
 		return total_sum
