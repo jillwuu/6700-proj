@@ -6,7 +6,7 @@ class Connect4:
 		# 6 rows, 7 columns
 		self.minimax = Minimax("connect4", 3)
 		self.minimax_heuristic_1 = Minimax("connect4", 2, 2, 'X', 'O') # set depth, then heuristic function, then THIS ALGORITHM'S mark, then other player's mark
-		self.minimax_heuristic_2 = Minimax("connect4", 2, 2, 'O', 'X') # set depth, then heuristic function, then THIS ALGORITHM'S mark, then other player's mark
+		self.minimax_heuristic_2 = Minimax("connect4", 2, 3, 'O', 'X') # set depth, then heuristic function, then THIS ALGORITHM'S mark, then other player's mark
 		self.row_size = 7 #number of columns
 		self.column_size = 9 #number of rows
 		self.player_0 = 'X'
@@ -23,11 +23,11 @@ class Connect4:
 				self.empty_spots.append((i, j))
 
 	def display_board(self):
-		row_divide = "--" + ("----" * (self.row_size - 1)) + "---"
+		row_divide = "--" + ("----" * (self.row_size - 1))
 		for x in range(self.column_size):
 			curr_row = ""
 			for y in range(self.row_size):
-				if y < self.column_size - 1:
+				if y < self.row_size - 1:
 					curr_row = curr_row + self.board[y][self.column_size - x - 1] + " | "
 				else:
 					curr_row = curr_row + self.board[y][self.column_size - x - 1]
