@@ -4,7 +4,7 @@ from minimax import Minimax
 class Connect4:
 	def __init__(self):
 		# 6 rows, 7 columns
-		self.minimax = Minimax("connect4", 3)
+		self.minimax = Minimax("connect4", 3, 4)
 		self.minimax_heuristic_1 = Minimax("connect4", 2, 2, 'X', 'O') # set depth, then heuristic function, then THIS ALGORITHM'S mark, then other player's mark
 		self.minimax_heuristic_2 = Minimax("connect4", 2, 3, 'O', 'X') # set depth, then heuristic function, then THIS ALGORITHM'S mark, then other player's mark
 		self.row_size = 7 #number of columns

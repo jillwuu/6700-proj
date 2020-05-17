@@ -48,7 +48,14 @@ class Minimax:
 	def connect4_min_comp(self, board, depth):
 		depth += 1
 		if (depth > self.depth):# or self.all_filled(board)): # depth no greater than 5? this is arbitrary, so we can change
-			board_val = self.connect4_check_val(board) if self.heuristic == 1 else self.connect4_check_val_v2(board) if self.heuristic == 2 else self.connect4_check_val_v3(board, False)
+			if (self.heuristic == 1):
+				board_val = self.connect4_check_val(board) 
+			elif self.heuristic == 2:
+				board_val = self.connect4_check_val_v2(board) 
+			elif self.heuristic == 3:
+				board_val = self.connect4_check_val_v3(board, False)
+			else:
+				board_val = self.connect4_check_val_v4(board)
 			return board_val
 		utility = sys.maxint
 		for i in range(self.row_size):
@@ -64,8 +71,15 @@ class Minimax:
 
 	def connect4_max_comp(self, board, depth):
 		depth += 1
-		if (depth > self.depth):# or self.all_filled(board)): # depth no greater than 5? this is arbitrary, so we can change
-			board_val = self.connect4_check_val(board) if self.heuristic == 1 else self.connect4_check_val_v2(board) if self.heuristic == 2 else self.connect4_check_val_v3(board, True)
+		if (depth > self.depth):
+			if (self.heuristic == 1):
+					board_val = self.connect4_check_val(board) 
+			elif self.heuristic == 2:
+				board_val = self.connect4_check_val_v2(board) 
+			elif self.heuristic == 3:
+				board_val = self.connect4_check_val_v3(board, False)
+			else:
+				board_val = self.connect4_check_val_v4(board)
 			return board_val
 		utility = -sys.maxint - 1
 		for i in range(self.row_size):
@@ -845,6 +859,246 @@ class Minimax:
 		# TODO: check diagonals
 
 		return 0
+
+	def connect4_check_val_v4(self, board):
+		# if any rows of 4 pieces are completed
+		total_sum = 0
+		row_size = len(board)
+		column_size = len(board[0])
+		# check just columns
+		for i in range(row_size):
+			num = 0
+			mark = board[i][0]
+			for j in range(column_size):
+				if board[i][j] == mark and board[i][j] != self.empty:
+					num += 1
+				else:
+					if num >= 4:
+						if mark == self.player_sign:
+							total_sum -= 10
+						if mark == self.computer_sign:
+							total_sum += 10
+					elif num == 3:
+						if mark == self.player_sign and board[i][j] == self.computer_sign:
+							total_sum += 100
+						elif mark == self.player_sign:
+							total_sum -= 5
+						if mark == self.computer_sign:
+							total_sum += 5
+					elif num == 2:
+						if mark == self.player_sign:
+							total_sum -= 1
+						if mark == self.computer_sign:
+							total_sum += 1
+					elif num == 1:
+						if mark == self.player_sign:
+							total_sum -= 0.5
+						if mark == self.computer_sign:
+							total_sum += 0.5
+					if(board[i][j] == self.empty):
+						num = 0
+					else:
+						num = 1
+					mark = board[i][j]
+		# check just rows
+		for i in range(self.column_size):
+			num = 0
+			mark = board[0][i]
+			for j in range(row_size):
+				if board[j][i] == mark and board[j][i] != self.empty:
+					num += 1
+				else:
+					if num >= 4:
+						if mark == self.player_sign:
+							total_sum -= 10
+						if mark == self.computer_sign:
+							total_sum += 10
+					elif num == 3:
+						if mark == self.player_sign and board[j][i] == self.computer_sign:
+							total_sum += 100
+						if mark == self.player_sign:
+							total_sum -= 5
+						if mark == self.computer_sign:
+							total_sum += 5
+					elif num == 2:
+						if mark == self.player_sign:
+							total_sum -= 1
+						if mark == self.computer_sign:
+							total_sum += 1
+					elif num == 1:
+						if mark == self.player_sign:
+							total_sum -= 0.5
+						if mark == self.computer_sign:
+							total_sum += 0.5
+					if(board[j][i] == self.empty):
+						num = 0
+					else:
+						num = 1
+					mark = board[j][i]
+		# diagonals
+
+		for i in range(row_size - 1, -1, -1):
+			mark = board[i][0]
+			num = 0
+			for j in range(column_size + row_size):
+				new_col = i + j
+				if new_col >= row_size:
+					break
+				if j >= column_size:
+					break
+				if board[new_col][j] == mark and board[new_col][j] != self.empty:
+					num += 1
+					
+				else:
+					if num >= 4:
+						if mark == self.player_sign:
+							total_sum -= 10
+						if mark == self.computer_sign:
+							total_sum += 10
+					elif num == 3:
+						if mark == self.player_sign and board[new_col][j] == self.computer_sign:
+							total_sum += 100
+						if mark == self.player_sign:
+							total_sum -= 5
+						if mark == self.computer_sign:
+							total_sum += 5
+					elif num == 2:
+						if mark == self.player_sign:
+							total_sum -= 1
+						if mark == self.computer_sign:
+							total_sum += 1
+					elif num == 1:
+						if mark == self.player_sign:
+							total_sum -= 0.5
+						if mark == self.computer_sign:
+							total_sum += 0.5
+					if(board[new_col][j] == self.empty):
+						num = 0
+					else:
+						num = 1
+					mark = board[new_col][j]
+
+		for i in range(row_size):
+			mark = board[0][i]
+			num = 0
+			for j in range(i, column_size + row_size):
+				new_col = j - i 
+				if new_col >= row_size:
+					break
+				if j >= column_size:
+					break
+				if board[new_col][j] == mark and board[new_col][j] != self.empty:
+					num += 1
+				else:
+					if num >= 4:
+						if mark == self.player_sign:
+							total_sum -= 10
+						if mark == self.computer_sign:
+							total_sum += 10
+					elif num == 3:
+						if mark == self.player_sign and board[new_col][j] == self.computer_sign:
+							total_sum += 100
+						if mark == self.player_sign:
+							total_sum -= 5
+						if mark == self.computer_sign:
+							total_sum += 5
+					elif num == 2:
+						if mark == self.player_sign:
+							total_sum -= 1
+						if mark == self.computer_sign:
+							total_sum += 1
+					elif num == 1:
+						if mark == self.player_sign:
+							total_sum -= 0.5
+						if mark == self.computer_sign:
+							total_sum += 0.5
+					if(board[new_col][j] == self.empty):
+						num = 0
+					else:
+						num = 1
+					mark = board[new_col][j]
+
+		for i in range(row_size):
+			mark = board[i][0]
+			num = 0
+			for j in range(row_size + column_size):
+				new_col = i - j
+				if new_col >= row_size or new_col < 0:
+					break
+				if j >= column_size:
+					break
+				if board[new_col][j] == mark and board[new_col][j] != self.empty:
+					num += 1
+				else:
+					if num >= 4:
+						if mark == self.player_sign:
+							total_sum -= 10
+						if mark == self.computer_sign:
+							total_sum += 10
+					elif num == 3:
+						if mark == self.player_sign and board[new_col][j] == self.computer_sign:
+							total_sum += 100
+						if mark == self.player_sign:
+							total_sum -= 5
+						if mark == self.computer_sign:
+							total_sum += 5
+					elif num == 2:
+						if mark == self.player_sign:
+							total_sum -= 1
+						if mark == self.computer_sign:
+							total_sum += 1
+					elif num == 1:
+						if mark == self.player_sign:
+							total_sum -= 0.5
+						if mark == self.computer_sign:
+							total_sum += 0.5
+					if(board[new_col][j] == self.empty):
+						num = 0
+					else:
+						num = 1
+					mark = board[new_col][j]
+
+		for i in range(column_size):
+			mark = board[row_size - 1][0]
+			num = 0
+			for j in range(row_size + self.column_size):
+				new_col = row_size - 1 - j
+				if new_col >= row_size or new_col < 0:
+					break
+				if j >= column_size:
+					break
+				if board[new_col][j] == mark and board[new_col][j] != self.empty:
+					num += 1
+				else:
+					if num >= 4:
+						if mark == self.player_sign:
+							total_sum -= 10
+						if mark == self.computer_sign:
+							total_sum += 10
+					elif num == 3:
+						if mark == self.player_sign and board[new_col][j] == self.computer_sign:
+							total_sum += 100
+						if mark == self.player_sign:
+							total_sum -= 5
+						if mark == self.computer_sign:
+							total_sum += 5
+					elif num == 2:
+						if mark == self.player_sign:
+							total_sum -= 1
+						if mark == self.computer_sign:
+							total_sum += 1
+					elif num == 1:
+						if mark == self.player_sign:
+							total_sum -= 0.5
+						if mark == self.computer_sign:
+							total_sum += 0.5
+					if(board[new_col][j] == self.empty):
+						num = 0
+					else:
+						num = 1
+					mark = board[new_col][j]
+
+		return total_sum
 
 
 	def check_val(self, board):
