@@ -2,11 +2,11 @@ import random
 from minimax import Minimax 
 
 class Connect4:
-	def __init__(self):
+	def __init__(self, depth_1, heuristic_1, depth_2, heuristic_2):
 		# 6 rows, 7 columns
 		self.minimax = Minimax("connect4", 3, 4)
-		self.minimax_heuristic_1 = Minimax("connect4", 2, 4, 'X', 'O') # set depth, then heuristic function, then THIS ALGORITHM'S mark, then other player's mark
-		self.minimax_heuristic_2 = Minimax("connect4", 2, 3, 'O', 'X') # set depth, then heuristic function, then THIS ALGORITHM'S mark, then other player's mark
+		self.minimax_heuristic_1 = Minimax("connect4", depth_1, heuristic_1, 'X', 'O') # set depth, then heuristic function, then THIS ALGORITHM'S mark, then other player's mark
+		self.minimax_heuristic_2 = Minimax("connect4", depth_2, heuristic_2, 'O', 'X') # set depth, then heuristic function, then THIS ALGORITHM'S mark, then other player's mark
 		self.row_size = 7 #number of columns
 		self.column_size = 9 #number of rows
 		self.player_0 = 'X'
@@ -220,9 +220,11 @@ class Connect4:
 				self.heuristic_2_move()
 		if self.winner:
 			print("GAME OVER, " + self.winner + " HAS WON")
+			return self.winner
 		else:
 			print("GAME OVER, TIE!")
+			return "TIE"
 
 
-game = Connect4()
-game.evaluate()
+
+

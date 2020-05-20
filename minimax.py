@@ -142,6 +142,7 @@ class Minimax:
 
 	# heuristic 1
 	def connect4_check_val(self, board):
+		computed_sum = 0
 		# if any rows of 4 pieces are completed
 		for x in range(self.row_size):
 			for y in range(self.column_size-4):
@@ -151,20 +152,20 @@ class Minimax:
 						if player_spot != board[x][y_move]:
 							if y_move == y+2:  #only 2 in a row (3rd spot not there)
 								if (player_spot == self.player_sign):
-									return -0.5
+									computed_sum -= 0.5
 								elif (player_spot == self.computer_sign):
-									return 0.5
+									computed_sum += 0.5
 							elif y_move == y+3: #only 3 in a row (4th spot not there)
 								if (player_spot == self.player_sign):
-									return -0.75
+									computed_sum -= 0.75
 								elif (player_spot == self.computer_sign):
-									return 0.75
+									computed_sum += 0.75
 							break
 						elif y_move == y+3:
 							if (player_spot == self.player_sign):
-								return -1
+								computed_sum -= 1
 							elif (player_spot == self.computer_sign):
-								return 1
+								computed_sum += 1
 
 		# check if any columns w/ 4 pieces are completed
 		for y in range(self.column_size):
@@ -175,20 +176,20 @@ class Minimax:
 						if player_spot != board[x_move][y]:
 							if x_move == x+2: #only 2 in a row (3rd spot not there)
 								if (player_spot == self.player_sign):
-									return -0.5
+									computed_sum -= 0.5
 								elif (player_spot == self.computer_sign):
-									return 0.5
+									computed_sum += 0.5
 							elif x_move == x+3: #only 3 in a row (4th spot not there)
 								if (player_spot == self.player_sign):
-									return -0.75
+									computed_sum -= 0.75
 								elif (player_spot == self.computer_sign):
-									return 0.75
+									computed_sum += 0.75
 							break
 						elif x_move == x+3:
 							if (player_spot == self.player_sign):
-								return -1
+								computed_sum -= 1
 							elif (player_spot == self.computer_sign):
-								return 1
+								computed_sum += 1
 
 		for i in range(self.row_size - 1, -1, -1):
 			mark = board[i][0]
@@ -203,20 +204,20 @@ class Minimax:
 					num += 1
 					if num == 4:
 						if mark == self.player_sign:
-							return -1
+							computed_sum -= 1
 						elif (mark == self.computer_sign):
-							return 1
+							computed_sum += 1
 				else:
 					if num == 2:
 						if mark == self.player_sign:
-							return -0.5
+							computed_sum -= 0.5
 						elif (mark == self.computer_sign):
-							return 0.5
+							computed_sum += 0.5
 					elif num == 3:
 						if mark == self.player_sign:
-							return -0.75
+							computed_sum -= 0.75
 						elif (mark == self.computer_sign):
-							return 0.75
+							computed_sum += 0.75
 					if(board[new_col][j] == self.empty):
 						num = 0
 					else:
@@ -236,20 +237,20 @@ class Minimax:
 					num += 1
 					if num == 4:
 						if mark == self.player_sign:
-							return -1
+							computed_sum -= 1
 						elif (mark == self.computer_sign):
-							return 1
+							computed_sum += 1
 				else:
 					if num == 2:
 						if mark == self.player_sign:
-							return -0.5
+							computed_sum -= 0.5
 						elif (mark == self.computer_sign):
-							return 0.5
+							computed_sum += 0.5
 					elif num == 3:
 						if mark == self.player_sign:
-							return -0.75
+							computed_sum -= 0.75
 						elif (mark == self.computer_sign):
-							return 0.75
+							computed_sum += 0.75
 					if(board[new_col][j] == self.empty):
 						num = 0
 					else:
@@ -269,20 +270,20 @@ class Minimax:
 					num += 1
 					if num == 4:
 						if mark == self.player_sign:
-							return -1
+							computed_sum -= 1
 						elif (mark == self.computer_sign):
-							return 1
+							computed_sum += 1
 				else:
 					if num == 2:
 						if mark == self.player_sign:
-							return -0.5
+							computed_sum -= 0.5
 						elif (mark == self.computer_sign):
-							return 0.5
+							computed_sum += 0.5
 					elif num == 3:
 						if mark == self.player_sign:
-							return -0.75
+							computed_sum -= 0.75
 						elif (mark == self.computer_sign):
-							return 0.75
+							computed_sum += 0.75
 					if(board[new_col][j] == self.empty):
 						num = 0
 					else:
@@ -302,20 +303,20 @@ class Minimax:
 					num += 1
 					if num == 4:
 						if mark == self.player_sign:
-							return -1
+							computed_sum -= 1
 						elif (mark == self.computer_sign):
-							return 1
+							computed_sum += 1
 				else:
 					if num == 2:
 						if mark == self.player_sign:
-							return -0.5
+							computed_sum -= 0.5
 						elif (mark == self.computer_sign):
-							return 0.5
+							computed_sum += 0.5
 					elif num == 3:
 						if mark == self.player_sign:
-							return -0.75
+							computed_sum -= 0.75
 						elif (mark == self.computer_sign):
-							return 0.75
+							computed_sum += 0.75
 					if(board[new_col][j] == self.empty):
 						num = 0
 					else:
@@ -323,9 +324,8 @@ class Minimax:
 					mark = board[new_col][j]
 
 
-		# TODO: check diagonals
 
-		return 0
+		return computed_sum
 
 	# heuristic 2
 	# checks for pieces in a row in a row/col/diagonal AND for total number of "XXXO" in row/col/diagonal where X is other player (ie this one tries to block!)

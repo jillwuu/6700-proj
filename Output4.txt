@@ -1,0 +1,8 @@
+4 goes first
+Heuristic 4: 14,
+Heuristic 2: 16, 
+Tie: 0
+2 goes first
+Heuristic 2: 14,
+Heuristic 4: 16, 
+Tie: 0

@@ -1,0 +1,11 @@
+Heuristic 4 v. 2
+
+Depth 1: 20,
+Depth 2: 10, 
+Tie: 0
+Depth 1: 15,
+Depth 3: 15, 
+Tie: 0
+Depth 2: 21,
+Depth 3: 9, 
+Tie: 0
